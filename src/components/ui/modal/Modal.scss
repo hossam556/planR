@@ -1,0 +1,101 @@
+.modal-wrapper {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(216, 216, 216);
+
+  &_close {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    color: rgb(6, 122, 151);
+    border-radius: 4px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: 2px solid rgb(169, 168, 168);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    &:hover {
+      opacity: 0.8;
+    }
+    span {
+      position: relative;
+      top: -3px;
+    }
+  }
+
+  &_section {
+    width: 80%;
+    margin: auto;
+    padding-top: 80px;
+
+    h1 {
+      font-size: 32px;
+      color: rgb(6, 122, 151);
+    }
+
+    p {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    &-input {
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid rgb(171, 171, 171);
+        padding: 10px 5px;
+        border-radius: 5px;
+        margin: 4px 0;
+      }
+      span {
+        font-weight: bold;
+        font-size: 13px;
+      }
+    }
+
+    &-textarea {
+      display: block;
+      margin-top: 10px;
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border: 2px solid rgb(171, 171, 171);
+        padding: 10px 5px;
+        border-radius: 5px;
+        margin: 4px 0;
+      }
+      span {
+        font-weight: bold;
+        font-size: 13px;
+      }
+    }
+
+    &-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 10px;
+
+      button {
+        width: 100px;
+        height: 40px;
+        border-radius: 4px;
+        background-color: rgb(6, 122, 151);
+        color: white;
+        text-align: center;
+        border: 0;
+        font-size: 15px;
+        cursor: pointer;
+      }
+    }
+  }
+}
