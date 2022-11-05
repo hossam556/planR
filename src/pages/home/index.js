@@ -11,13 +11,15 @@ const titles = {
   actions: "actions",
 };
 
+const intialData = {
+  title: "",
+  description: "",
+};
+
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [data, setData] = useState({
-    title: "",
-    description: "",
-  });
+  const [data, setData] = useState(intialData);
   const [items, setItems] = useState({
     [titles.ambitie]: [],
     [titles.doelstellingen]: [],
@@ -42,6 +44,7 @@ const Home = () => {
       [modalType]: newItems,
     });
     setShowModal(false);
+    setData(intialData);
   };
 
   const inputHandler = (e) => {
@@ -65,7 +68,6 @@ const Home = () => {
 
   const dragOverHandler = (title) => {
     if (container === title) return;
-    console.log(title);
     setContainer(title);
   };
 
