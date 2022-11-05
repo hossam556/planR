@@ -76,6 +76,7 @@ const Home = () => {
           inputHandler={inputHandler}
           showModalHandler={showModalHandler}
           sumbitFormHandler={sumbitFormHandler}
+          data={data}
         />
       )}
       <div className="home-wrapper-table">

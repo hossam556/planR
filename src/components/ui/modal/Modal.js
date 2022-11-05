@@ -1,7 +1,7 @@
 import React from "react";
 import "./Modal.scss";
 
-const Modal = ({ inputHandler, showModalHandler, sumbitFormHandler }) => {
+const Modal = ({ inputHandler, showModalHandler, sumbitFormHandler, data }) => {
   return (
     <div className="modal-wrapper">
       <div className="modal-wrapper_close" onClick={showModalHandler}>
@@ -21,8 +21,14 @@ const Modal = ({ inputHandler, showModalHandler, sumbitFormHandler }) => {
             <textarea type="text" name="description" onChange={inputHandler} />
           </label>
 
-          <div className="modal-wrapper_section-button">
-            <button type="submit">Submit</button>
+          <div className={`modal-wrapper_section-button`}>
+            <button
+              type="submit"
+              className={`${!data.title ? "disabled" : ""}`}
+              disabled={!data.title}
+            >
+              Submit
+            </button>
           </div>
         </form>
       </section>
