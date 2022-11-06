@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./home.scss";
 import Card from "../../components/ui/card/Card";
 import Modal from "../../components/ui/modal/Modal";
@@ -11,15 +11,11 @@ const titles = {
   actions: "actions",
 };
 
-const intialData = {
-  title: "",
-  description: "",
-};
-
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [data, setData] = useState(intialData);
+  const [oldData, setOldData] = useState(null);
+  const [editItem, setEditItem] = useState(null);
   const [items, setItems] = useState({
     [titles.ambitie]: [],
     [titles.doelstellingen]: [],
@@ -34,7 +30,7 @@ const Home = () => {
     setShowModal((prev) => !prev);
   };
 
-  const sumbitFormHandler = (e) => {
+  const sumbitFormHandler = (e, data) => {
     e.preventDefault();
     let newItems = [...items[modalType]];
     newItems.push(data);
@@ -44,19 +40,22 @@ const Home = () => {
       [modalType]: newItems,
     });
     setShowModal(false);
-    setData(intialData);
   };
 
-  const inputHandler = (e) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
+  const editFormHandler = (e, data) => {
+    e.preventDefault();
+    let newItems = [...items[editItem.title]];
+    newItems[editItem.index] = data;
+
+    setItems({
+      ...items,
+      [editItem.title]: newItems,
     });
+    setShowModal(false);
   };
 
   const dragEndHandler = (title, index, item) => {
     if (container === title) return;
-    console.log(items[container]);
     let draggedToItems = [...items[container], item];
     let draggedFromItems = items[title].filter((el, i) => i !== index);
     setItems({
@@ -71,14 +70,34 @@ const Home = () => {
     setContainer(title);
   };
 
+  const deleteHandler = (title, index) => {
+    let newItems = [...items[title]];
+    newItems.splice(index, 1);
+    setItems({
+      ...items,
+      [title]: newItems,
+    });
+  };
+
+  const editHandler = (title, index) => {
+    let editedItem = items[title][index];
+
+    setOldData(editedItem);
+    setEditItem({
+      title,
+      index,
+    });
+    setShowModal(true);
+  };
+
   return (
     <div className="home-wrapper">
       {showModal && (
         <Modal
-          inputHandler={inputHandler}
           showModalHandler={showModalHandler}
           sumbitFormHandler={sumbitFormHandler}
-          data={data}
+          oldData={oldData}
+          editFormHandler={editFormHandler}
         />
       )}
       <div className="home-wrapper-table">
@@ -89,6 +108,8 @@ const Home = () => {
           items={items[titles.ambitie]}
           dragOverHandler={dragOverHandler}
           dragEndHandler={dragEndHandler}
+          deleteHandler={deleteHandler}
+          editHandler={editHandler}
         />
         <Card
           title={titles.doelstellingen}
@@ -97,6 +118,8 @@ const Home = () => {
           items={items[titles.doelstellingen]}
           dragOverHandler={dragOverHandler}
           dragEndHandler={dragEndHandler}
+          deleteHandler={deleteHandler}
+          editHandler={editHandler}
         />
         <div className="home-wrapper-table-box3">
           <div className="home-wrapper-table-box3_top">
@@ -106,6 +129,8 @@ const Home = () => {
               items={items[titles.stragtigies]}
               dragOverHandler={dragOverHandler}
               dragEndHandler={dragEndHandler}
+              deleteHandler={deleteHandler}
+              editHandler={editHandler}
             />
             <Card
               title={titles.dashboard}
@@ -113,6 +138,8 @@ const Home = () => {
               items={items[titles.dashboard]}
               dragOverHandler={dragOverHandler}
               dragEndHandler={dragEndHandler}
+              deleteHandler={deleteHandler}
+              editHandler={editHandler}
             />
             <Card
               title={titles.actions}
@@ -120,6 +147,8 @@ const Home = () => {
               items={items[titles.actions]}
               dragOverHandler={dragOverHandler}
               dragEndHandler={dragEndHandler}
+              deleteHandler={deleteHandler}
+              editHandler={editHandler}
             />
           </div>
           <div

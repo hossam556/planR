@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Card.scss";
 import { Add } from "../../../assets/icons/index";
+import CardItem from "../cardItem/CardItem";
 
 const Card = ({
   title = "header",
@@ -9,6 +10,8 @@ const Card = ({
   showModalHandler,
   dragOverHandler,
   dragEndHandler,
+  deleteHandler,
+  editHandler,
 }) => {
   return (
     <div
@@ -22,19 +25,15 @@ const Card = ({
       <div className="card-items">
         {items.length > 0 ? (
           items.map((item, i) => (
-            <div
+            <CardItem
               key={i}
-              className={`card-items-item-wrapper ${
-                title !== "ambitie" &&
-                title !== "doelstellingen" &&
-                i > 0 &&
-                "border-style"
-              }`}
-              draggable
-              onDragEnd={() => dragEndHandler(title, i, item)}
-            >
-              <div className="card-items-item-wrapper_item">{item.title}</div>
-            </div>
+              dragEndHandler={dragEndHandler}
+              item={item}
+              index={i}
+              title={title}
+              deleteHandler={deleteHandler}
+              editHandler={editHandler}
+            />
           ))
         ) : (
           <p className="empty">empty state</p>
