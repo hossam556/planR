@@ -1,164 +1,48 @@
 import React, { useState } from "react";
 import "./home.scss";
-import Card from "../../components/ui/card/Card";
+import Table from "../../components/ui/table/Table";
+import CreateButton from "../../components/ui/createButton/CreateButton";
 import Modal from "../../components/ui/modal/Modal";
-
-const titles = {
-  ambitie: "ambitie",
-  doelstellingen: "doelstellingen",
-  stragtigies: "strategies",
-  dashboard: "dashboard",
-  actions: "actions",
-};
+import { staticData } from "../../utils/tableData";
 
 const Home = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState("");
-  const [oldData, setOldData] = useState(null);
-  const [editItem, setEditItem] = useState(null);
-  const [items, setItems] = useState({
-    [titles.ambitie]: [],
-    [titles.doelstellingen]: [],
-    [titles.stragtigies]: [],
-    [titles.dashboard]: [],
-    [titles.actions]: [],
-  });
-  const [container, setContainer] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [data, setData] = useState(staticData);
+  const [editedItem, setEditedItem] = useState(null);
 
-  const showModalHandler = (title) => {
-    setModalType(title);
-    setShowModal((prev) => !prev);
-  };
-
-  const sumbitFormHandler = (e, data) => {
+  const sumbitFormHandler = (e, values) => {
     e.preventDefault();
-    let newItems = [...items[modalType]];
-    newItems.push(data);
-
-    setItems({
-      ...items,
-      [modalType]: newItems,
-    });
-    setShowModal(false);
+    setData([values, ...data]);
+    setShowPopup(false);
   };
 
-  const editFormHandler = (e, data) => {
+  const editFormHandler = (e, values) => {
     e.preventDefault();
-    let newItems = [...items[editItem.title]];
-    newItems[editItem.index] = data;
-
-    setItems({
-      ...items,
-      [editItem.title]: newItems,
-    });
-    setShowModal(false);
+    let newData = [...data];
+    newData[editedItem.index] = values;
+    setData(newData);
+    setShowPopup(false);
+    setEditedItem(null);
   };
 
-  const dragEndHandler = (title, index, item) => {
-    if (container === title) return;
-    let draggedToItems = [...items[container], item];
-    let draggedFromItems = items[title].filter((el, i) => i !== index);
-    setItems({
-      ...items,
-      [container]: draggedToItems,
-      [title]: draggedFromItems,
-    });
-  };
-
-  const dragOverHandler = (title) => {
-    if (container === title) return;
-    setContainer(title);
-  };
-
-  const deleteHandler = (title, index) => {
-    let newItems = [...items[title]];
-    newItems.splice(index, 1);
-    setItems({
-      ...items,
-      [title]: newItems,
-    });
-  };
-
-  const editHandler = (title, index) => {
-    let editedItem = items[title][index];
-
-    setOldData(editedItem);
-    setEditItem({
-      title,
-      index,
-    });
-    setShowModal(true);
+  const getEditedItem = (item, i) => {
+    setEditedItem({ ...item, index: i });
+    setShowPopup(true);
   };
 
   return (
     <div className="home-wrapper">
-      {showModal && (
+      <h2>Tickets Dashboard</h2>
+      <Table data={data} setData={setData} getEditedItem={getEditedItem} />
+      <CreateButton clickHandler={() => setShowPopup(true)} />
+      {showPopup && (
         <Modal
-          showModalHandler={showModalHandler}
+          setShowPopup={setShowPopup}
           sumbitFormHandler={sumbitFormHandler}
-          oldData={oldData}
           editFormHandler={editFormHandler}
+          oldData={editedItem}
         />
       )}
-      <div className="home-wrapper-table">
-        <Card
-          title={titles.ambitie}
-          className="home-wrapper-table-box1"
-          showModalHandler={showModalHandler}
-          items={items[titles.ambitie]}
-          dragOverHandler={dragOverHandler}
-          dragEndHandler={dragEndHandler}
-          deleteHandler={deleteHandler}
-          editHandler={editHandler}
-        />
-        <Card
-          title={titles.doelstellingen}
-          className="home-wrapper-table-box2"
-          showModalHandler={showModalHandler}
-          items={items[titles.doelstellingen]}
-          dragOverHandler={dragOverHandler}
-          dragEndHandler={dragEndHandler}
-          deleteHandler={deleteHandler}
-          editHandler={editHandler}
-        />
-        <div className="home-wrapper-table-box3">
-          <div className="home-wrapper-table-box3_top">
-            <Card
-              title={titles.stragtigies}
-              showModalHandler={showModalHandler}
-              items={items[titles.stragtigies]}
-              dragOverHandler={dragOverHandler}
-              dragEndHandler={dragEndHandler}
-              deleteHandler={deleteHandler}
-              editHandler={editHandler}
-            />
-            <Card
-              title={titles.dashboard}
-              showModalHandler={showModalHandler}
-              items={items[titles.dashboard]}
-              dragOverHandler={dragOverHandler}
-              dragEndHandler={dragEndHandler}
-              deleteHandler={deleteHandler}
-              editHandler={editHandler}
-            />
-            <Card
-              title={titles.actions}
-              showModalHandler={showModalHandler}
-              items={items[titles.actions]}
-              dragOverHandler={dragOverHandler}
-              dragEndHandler={dragEndHandler}
-              deleteHandler={deleteHandler}
-              editHandler={editHandler}
-            />
-          </div>
-          <div
-            onDragOver={() => dragOverHandler(titles.stragtigies)}
-            className="home-wrapper-table-box3_drag"
-          >
-            <p className="empty">Drag items here</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

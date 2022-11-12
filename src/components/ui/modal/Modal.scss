@@ -1,26 +1,48 @@
-.modal-wrapper {
+.modal-backdrop {
   position: absolute;
-  z-index: 1000;
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
-  background: rgb(216, 216, 216);
+  right: 0;
+  background-color: rgb(0, 0, 0, 0.4);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-wrapper {
+  position: relative;
+  z-index: 1000;
+  padding: 20px 40px;
+  border-radius: 8px;
+  min-width: 40%;
+  background: white;
+  animation: modal 0.7s forwards;
+  transform: translateY(200px);
+
+  @keyframes modal {
+    0% {
+      transform: translateY(200px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
 
   &_close {
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     color: rgb(6, 122, 151);
-    border-radius: 4px;
+    border-radius: 8px;
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 15px;
     border: 2px solid rgb(169, 168, 168);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     &:hover {
       opacity: 0.8;
@@ -32,12 +54,15 @@
   }
 
   &_section {
-    width: 80%;
     margin: auto;
-    padding-top: 80px;
 
+    &_inputs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
     h1 {
-      font-size: 32px;
+      font-size: 20px;
       color: rgb(6, 122, 151);
     }
 
@@ -63,12 +88,10 @@
 
     &-textarea {
       display: block;
-      margin-top: 10px;
       textarea {
         width: 100%;
         box-sizing: border-box;
         border: 2px solid rgb(171, 171, 171);
-        padding: 10px 5px;
         border-radius: 5px;
         margin: 4px 0;
       }
